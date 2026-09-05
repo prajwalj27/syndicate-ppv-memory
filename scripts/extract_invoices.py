@@ -1,12 +1,12 @@
 """CLI to run LLM-based invoice extraction against the sample invoices.
 
 Loops over data/invoices/*.txt, extracts structured fields from each via
-ppv_memory.extraction, and prints the result.
+src.extraction, and prints the result.
 
 Usage:
     python scripts/extract_invoices.py
 
-Requires TENSORMUX_API_KEY to be set (see ppv_memory/extraction.py and
+Requires TENSORMUX_API_KEY to be set (see src/extraction.py and
 README.md).
 """
 
@@ -17,7 +17,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
-from ppv_memory.extraction import extract_invoice_file
+from src.extraction import extract_invoice_file
 
 INVOICES_DIR = BASE_DIR / "data" / "invoices"
 

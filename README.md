@@ -19,7 +19,7 @@ python scripts/generate_data.py
 
 ## Invoice extraction
 
-`ppv_memory/extraction.py` reads a plain-text invoice and uses an LLM
+`src/extraction.py` reads a plain-text invoice and uses an LLM
 (Tensormux's OpenAI-compatible endpoint, GLM-4.7-Flash — see PLAN.md
 section 4) to extract structured fields: vendor, item, PO reference,
 quantity, unit price, invoice date, invoice number.

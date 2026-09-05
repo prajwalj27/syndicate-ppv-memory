@@ -1,8 +1,11 @@
 ppv-memory/
-├── PLAN.md                          # your implementation plan (already have this)
 ├── README.md                        # final submission doc — what it does, how to run, track, etc.
 ├── requirements.txt                 # Python dependencies
 ├── .gitignore
+│
+├── docs/
+│   ├── PLAN.md                       # your implementation plan (already have this)
+│   └── STRUCTURE.md                  # this file — project file/folder structure
 │
 ├── data/
 │   ├── ppv_memory.db                 # SQLite DB (already created — Step 1)
