@@ -1,0 +1,15 @@
+INVOICE
+Invoice Number: INV-1003
+Invoice Date: 2026-08-10
+Vendor: Meridian Office Supply
+Vendor Address: 220 Industrial Pkwy, Newark, NJ 07102
+PO Reference: PO-4001
+
+Line Items:
+- Ergonomic Office Chair (Model ErgoFlex-200) x 15 @ $190.00 = $2850.00
+
+Subtotal: $2850.00
+Tax: $0.00
+Total Due: $2850.00
+Payment Terms: Net 30
+Remit To: Meridian Office Supply, Accounts Receivable
