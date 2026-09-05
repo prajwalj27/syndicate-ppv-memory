@@ -29,9 +29,17 @@ Tensormux API key. Optionally override `TENSORMUX_BASE_URL` (default
 `https://api.tensormux.com/v1`) or `PPV_EXTRACTION_MODEL` (default
 `glm-4-7-flash`).
 
-Run extraction against the 5 sample invoices and print the results:
+Set these via a `.env` file (copy `.env.example` to `.env` and fill in your
+key — it's loaded automatically and gitignored):
 
 ```
-export TENSORMUX_API_KEY=your-key-here
+cp .env.example .env
+# edit .env and paste in your key
+```
+
+or export them directly in your shell instead. Then run extraction against
+the 5 sample invoices and print the results:
+
+```
 python scripts/extract_invoices.py
 ```

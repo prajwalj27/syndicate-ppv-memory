@@ -18,6 +18,10 @@ Optional environment variables:
     TENSORMUX_BASE_URL     - defaults to "https://api.tensormux.com/v1"
     PPV_EXTRACTION_MODEL   - defaults to "glm-4-7-flash"
 
+These can be set in the shell, or dropped in a .env file at the repo
+root (see .env.example) — it's loaded automatically on import and never
+committed (.env is gitignored).
+
 GLM-4.7-Flash is a reasoning model: it emits a "reasoning" trace before
 its final answer, both counted against max_tokens. A too-low max_tokens
 truncates the response before the final JSON is produced, so this module
@@ -32,7 +36,10 @@ import re
 from pathlib import Path
 from typing import Any
 
+from dotenv import load_dotenv
 from openai import OpenAI
+
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 DEFAULT_BASE_URL = "https://api.tensormux.com/v1"
 DEFAULT_MODEL = "glm-4-7-flash"
