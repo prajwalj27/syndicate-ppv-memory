@@ -42,3 +42,22 @@ def get_latest_resolution(vendor: str, item: str) -> dict[str, Any] | None:
             (vendor, item),
         ).fetchone()
     return dict(row) if row else None
+
+
+def insert_resolution(
+    vendor: str,
+    item: str,
+    resolved_price: float,
+    resolved_by: str,
+    reason: str,
+    date_resolved: str,
+) -> None:
+    """Insert a new resolution row for a vendor+item."""
+    with _connect() as conn:
+        conn.execute(
+            """
+            INSERT INTO resolutions (vendor, item, resolved_price, resolved_by, reason, date_resolved)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (vendor, item, resolved_price, resolved_by, reason, date_resolved),
+        )
