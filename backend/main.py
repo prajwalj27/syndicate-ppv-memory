@@ -17,6 +17,7 @@ sys.path.insert(0, str(BASE_DIR))
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from src.db import (
@@ -29,6 +30,7 @@ from src.graph.build_graph import graph
 from src.graph.nodes import build_review_payload, record_resolution_node
 
 INVOICES_DIR = BASE_DIR / "data" / "invoices"
+INVOICES_PDF_DIR = BASE_DIR / "data" / "invoices_pdf"
 
 DECISION_TO_STATUS = {
     "auto_approve": "auto_approved",
@@ -51,6 +53,13 @@ app.add_middleware(
     allow_origins=["http://localhost:3000"],
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+# Static file mounts for the invoice simulator page (frontend/app/simulator) to
+# preview raw invoice documents. Read-only file serving, no endpoint logic.
+app.mount("/static/invoices", StaticFiles(directory=str(INVOICES_DIR)), name="invoice_txt_static")
+app.mount(
+    "/static/invoices_pdf", StaticFiles(directory=str(INVOICES_PDF_DIR)), name="invoice_pdf_static"
 )
 
 
