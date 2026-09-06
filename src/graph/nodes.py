@@ -6,9 +6,11 @@ incrementally as later build steps are implemented.
 
 from __future__ import annotations
 
+from datetime import date
+
 from langgraph.types import interrupt
 
-from src.db import get_latest_resolution, get_po
+from src.db import get_latest_resolution, get_po, insert_resolution
 from src.extraction import extract_invoice_file
 from src.graph.state import PPVState
 
@@ -112,3 +114,32 @@ def human_review_node(state: PPVState) -> PPVState:
     human_resolution = interrupt(payload)
 
     return {**state, "human_resolution": human_resolution}
+
+
+def record_resolution_node(state: PPVState) -> PPVState:
+    """Apply the human's resume decision after `human_review_node`'s interrupt.
+
+    If approved, writes a new `resolutions` row so future invoices for this
+    vendor+item can auto-approve against it. Either way, appends the human's
+    reason to `reasoning` so it captures the full history: why the invoice
+    was flagged, and how it was resolved.
+    """
+    extracted = state["extracted_data"]
+    human_resolution = state["human_resolution"]
+
+    if human_resolution["approved"]:
+        insert_resolution(
+            vendor=extracted["vendor"],
+            item=extracted["item"],
+            resolved_price=human_resolution["resolved_price"],
+            resolved_by=human_resolution["resolver_name"],
+            reason=human_resolution["reason"],
+            date_resolved=date.today().isoformat(),
+        )
+        decision = "resolved"
+    else:
+        decision = "rejected"
+
+    reasoning = f"{state['reasoning']} Resolved by {human_resolution['resolver_name']}: {human_resolution['reason']}"
+
+    return {**state, "decision": decision, "reasoning": reasoning}
