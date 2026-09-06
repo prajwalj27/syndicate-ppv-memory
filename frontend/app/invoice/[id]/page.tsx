@@ -3,36 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { use } from "react";
-import {
-  getInvoice,
-  resolveInvoice,
-  type Invoice,
-  type InvoiceStatus,
-} from "@/lib/api";
-
-const STATUS_BADGE_CLASSES: Record<InvoiceStatus, string> = {
-  auto_approved: "bg-green-100 text-green-800",
-  pending_review: "bg-yellow-100 text-yellow-800",
-  resolved: "bg-blue-100 text-blue-800",
-  rejected: "bg-red-100 text-red-800",
-};
-
-const STATUS_LABELS: Record<InvoiceStatus, string> = {
-  auto_approved: "Auto-Approved",
-  pending_review: "Pending Review",
-  resolved: "Resolved",
-  rejected: "Rejected",
-};
-
-function StatusBadge({ status }: { status: InvoiceStatus }) {
-  return (
-    <span
-      className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_BADGE_CLASSES[status]}`}
-    >
-      {STATUS_LABELS[status]}
-    </span>
-  );
-}
+import { getInvoice, resolveInvoice, type Invoice } from "@/lib/api";
+import { StatusBadge } from "@/components/StatusBadge";
 
 function ResolutionForm({
   invoiceId,
@@ -66,8 +38,8 @@ function ResolutionForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-4 space-y-3 rounded border border-zinc-200 p-4">
-      <h3 className="text-sm font-semibold text-zinc-900">Resolve invoice</h3>
+    <form onSubmit={handleSubmit} className="mt-8 space-y-3 rounded-lg border border-zinc-200 p-4">
+      <h3 className="text-xs font-medium uppercase tracking-wide text-zinc-500">Resolve invoice</h3>
 
       <div>
         <label className="block text-xs font-medium text-zinc-500">Resolver name</label>
@@ -166,13 +138,13 @@ export default function InvoiceDetailPage({
       {invoice && (
         <>
           <div className="mt-4 flex items-center gap-3">
-            <h1 className="text-2xl font-semibold text-zinc-900">
+            <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
               {(invoice.extracted_data?.invoice_number as string) ?? invoice.invoice_filename}
             </h1>
             <StatusBadge status={invoice.status} />
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-4 rounded border border-zinc-200 p-4 text-sm">
+          <div className="mt-6 grid grid-cols-2 gap-4 rounded-lg border border-zinc-200 p-4 text-sm">
             <div>
               <div className="text-xs font-medium text-zinc-500">Vendor</div>
               <div className="mt-1 text-zinc-900">{invoice.vendor}</div>
@@ -196,25 +168,25 @@ export default function InvoiceDetailPage({
           </div>
 
           {invoice.status === "auto_approved" && priorResolution && (
-            <div className="mt-6 rounded border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
+            <div className="mt-6 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
               <span className="font-semibold">Prior resolution cited: </span>
               Consistent with prior approval on {priorResolution.date_resolved}: &ldquo;
               {priorResolution.reason}&rdquo;
             </div>
           )}
 
-          <div className="mt-6">
-            <h2 className="text-sm font-semibold text-zinc-900">Reasoning</h2>
-            <p className="mt-2 rounded border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-800">
+          <div className="mt-8">
+            <h2 className="text-xs font-medium uppercase tracking-wide text-zinc-500">Reasoning</h2>
+            <p className="mt-2 rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-800">
               {invoice.reasoning}
             </p>
           </div>
 
-          <div className="mt-6">
-            <h2 className="text-sm font-semibold text-zinc-900">Steps</h2>
+          <div className="mt-8">
+            <h2 className="text-xs font-medium uppercase tracking-wide text-zinc-500">Steps</h2>
             <ul className="mt-2 space-y-2">
               {invoice.steps.map((step, i) => (
-                <li key={i} className="flex gap-3 rounded border border-zinc-200 p-3 text-sm">
+                <li key={i} className="flex gap-3 rounded-lg border border-zinc-200 p-3 text-sm">
                   <span className={step.done ? "text-green-600" : "text-zinc-400"}>
                     {step.done ? "✓" : "○"}
                   </span>
