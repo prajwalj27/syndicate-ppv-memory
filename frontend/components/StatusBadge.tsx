@@ -1,10 +1,17 @@
 import type { InvoiceStatus } from "@/lib/api";
 
 export const STATUS_BADGE_CLASSES: Record<InvoiceStatus, string> = {
-  auto_approved: "bg-green-100 text-green-800",
-  pending_review: "bg-yellow-100 text-yellow-800",
-  resolved: "bg-blue-100 text-blue-800",
-  rejected: "bg-red-100 text-red-800",
+  auto_approved: "bg-emerald-50 text-emerald-700 ring-emerald-600/20",
+  pending_review: "bg-amber-50 text-amber-700 ring-amber-600/20",
+  resolved: "bg-sky-50 text-sky-700 ring-sky-600/20",
+  rejected: "bg-rose-50 text-rose-700 ring-rose-600/20",
+};
+
+export const STATUS_DOT_CLASSES: Record<InvoiceStatus, string> = {
+  auto_approved: "bg-emerald-500",
+  pending_review: "bg-amber-500",
+  resolved: "bg-sky-500",
+  rejected: "bg-rose-500",
 };
 
 export const STATUS_LABELS: Record<InvoiceStatus, string> = {
@@ -17,8 +24,9 @@ export const STATUS_LABELS: Record<InvoiceStatus, string> = {
 export function StatusBadge({ status }: { status: InvoiceStatus }) {
   return (
     <span
-      className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_BADGE_CLASSES[status]}`}
+      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset ${STATUS_BADGE_CLASSES[status]}`}
     >
+      <span className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT_CLASSES[status]}`} />
       {STATUS_LABELS[status]}
     </span>
   );
