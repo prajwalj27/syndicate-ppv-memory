@@ -80,3 +80,4 @@ node_modules/
 # --- Demo/output artifacts (screen recordings etc. — keep repo lean; store these outside git) ---
 *.mp4
 *.mov
+data/ppv_memory.db
