@@ -11,6 +11,13 @@ const KNOWN_INVOICE_FILES = [
   "INV-1003.txt",
   "INV-1004.txt",
   "INV-1005.txt",
+  "INV-2001.txt",
+  "INV-2002.txt",
+  "INV-2003.txt",
+  "INV-2004.txt",
+  "INV-3001.txt",
+  "INV-3002.txt",
+  "INV-3003.txt",
 ];
 
 export default function Home() {
@@ -125,32 +132,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mt-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm">
-        <h2 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-          Trigger new invoice
-        </h2>
-        <div className="mt-3 flex flex-wrap items-center gap-3">
-          <select
-            value={selectedFile}
-            onChange={(e) => setSelectedFile(e.target.value)}
-            className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
-          >
-            {KNOWN_INVOICE_FILES.map((file) => (
-              <option key={file} value={file}>
-                {file}
-              </option>
-            ))}
-          </select>
-          <button
-            onClick={handleTrigger}
-            disabled={triggering}
-            className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {triggering ? "Triggering…" : "Trigger new invoice"}
-          </button>
-        </div>
-      </section>
-
       {error && (
         <p className="mt-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-2.5 text-sm text-rose-700">
           {error}
@@ -158,9 +139,6 @@ export default function Home() {
       )}
 
       <section className="mt-6">
-        <h2 className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-          Invoices
-        </h2>
         <div className="mt-2 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
