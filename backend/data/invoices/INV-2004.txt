@@ -1,0 +1,15 @@
+INVOICE
+Invoice Number: INV-2004
+Invoice Date: 2026-08-15
+Vendor: Brightline Logistics
+Vendor Address: 220 Industrial Pkwy, Newark, NJ 07102
+PO Reference: PO-5002
+
+Line Items:
+- Warehousing Fee — Monthly x 1 @ $475.00 = $475.00
+
+Subtotal: $475.00
+Tax: $0.00
+Total Due: $475.00
+Payment Terms: Net 30
+Remit To: Brightline Logistics, Accounts Receivable

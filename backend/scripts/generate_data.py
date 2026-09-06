@@ -34,6 +34,30 @@ PURCHASE_ORDERS = [
         "unit_price": 350.00,
         "date_issued": "2026-07-05",
     },
+    {
+        "po_number": "PO-5001",
+        "vendor": "Brightline Logistics",
+        "item": "Freight Shipping — Standard Route",
+        "quantity": 1,
+        "unit_price": 2200.00,
+        "date_issued": "2026-07-08",
+    },
+    {
+        "po_number": "PO-5002",
+        "vendor": "Brightline Logistics",
+        "item": "Warehousing Fee — Monthly",
+        "quantity": 1,
+        "unit_price": 450.00,
+        "date_issued": "2026-07-10",
+    },
+    {
+        "po_number": "PO-6001",
+        "vendor": "Crestpoint IT Services",
+        "item": "Managed IT Support — Monthly Retainer",
+        "quantity": 1,
+        "unit_price": 3000.00,
+        "date_issued": "2026-07-12",
+    },
 ]
 
 INVOICES = [
@@ -78,6 +102,65 @@ INVOICES = [
         "po_number": "PO-4001",
         "quantity": 20,
         "unit_price": 205.00,
+        "note": None,
+    },
+    {
+        "invoice_number": "INV-2001",
+        "invoice_date": "2026-07-15",
+        "po_number": "PO-5001",
+        "quantity": 1,
+        "unit_price": 2200.00,
+        "note": None,
+    },
+    {
+        "invoice_number": "INV-2002",
+        "invoice_date": "2026-07-22",
+        "po_number": "PO-5001",
+        "quantity": 1,
+        "unit_price": 2321.00,
+        "note": (
+            "Note: Fuel surcharge applied at time of shipment; not reflected "
+            "in original PO."
+        ),
+    },
+    {
+        "invoice_number": "INV-2003",
+        "invoice_date": "2026-08-10",
+        "po_number": "PO-5001",
+        "quantity": 1,
+        "unit_price": 2321.00,
+        "note": None,
+    },
+    {
+        "invoice_number": "INV-2004",
+        "invoice_date": "2026-08-15",
+        "po_number": "PO-5002",
+        "quantity": 1,
+        "unit_price": 475.00,
+        "note": None,
+    },
+    {
+        "invoice_number": "INV-3001",
+        "invoice_date": "2026-07-19",
+        "po_number": "PO-6001",
+        "quantity": 1,
+        "unit_price": 3000.00,
+        "note": None,
+    },
+    {
+        "invoice_number": "INV-3002",
+        "invoice_date": "2026-07-26",
+        "po_number": "PO-6001",
+        "quantity": 1,
+        "unit_price": 3063.00,
+        "note": None,
+    },
+    {
+        "invoice_number": "INV-3003",
+        "invoice_date": "2026-08-11",
+        "po_number": "PO-6001",
+        "quantity": 1,
+        "unit_price": 3054.00,
         "note": None,
     },
 ]

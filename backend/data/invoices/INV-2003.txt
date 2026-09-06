@@ -1,0 +1,15 @@
+INVOICE
+Invoice Number: INV-2003
+Invoice Date: 2026-08-10
+Vendor: Brightline Logistics
+Vendor Address: 220 Industrial Pkwy, Newark, NJ 07102
+PO Reference: PO-5001
+
+Line Items:
+- Freight Shipping — Standard Route x 1 @ $2321.00 = $2321.00
+
+Subtotal: $2321.00
+Tax: $0.00
+Total Due: $2321.00
+Payment Terms: Net 30
+Remit To: Brightline Logistics, Accounts Receivable
