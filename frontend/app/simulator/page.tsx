@@ -143,23 +143,29 @@ type LoadedDoc =
   | { filename: string; text?: undefined; error: string };
 
 export default function SimulatorPage() {
-  const [selectedFilename, setSelectedFilename] = useState(`${INVOICE_NUMBERS[0]}.txt`);
+  const [selectedFilename, setSelectedFilename] = useState(
+    `${INVOICE_NUMBERS[0]}.txt`,
+  );
   const [loadedDoc, setLoadedDoc] = useState<LoadedDoc | null>(null);
 
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
-  const [sendResult, setSendResult] = useState<{ filename: string; status: InvoiceStatus } | null>(
-    null
-  );
+  const [sendResult, setSendResult] = useState<{
+    filename: string;
+    status: InvoiceStatus;
+  } | null>(null);
 
   const invoiceNumber = invoiceNumberOf(selectedFilename);
   const format = formatOf(selectedFilename);
   const summary = INVOICE_SUMMARIES[invoiceNumber];
   const notes = SCENARIO_NOTES[invoiceNumber];
 
-  const documentLoading = format === "txt" && loadedDoc?.filename !== selectedFilename;
-  const documentText = loadedDoc?.filename === selectedFilename ? loadedDoc.text ?? null : null;
-  const documentError = loadedDoc?.filename === selectedFilename ? loadedDoc.error ?? null : null;
+  const documentLoading =
+    format === "txt" && loadedDoc?.filename !== selectedFilename;
+  const documentText =
+    loadedDoc?.filename === selectedFilename ? (loadedDoc.text ?? null) : null;
+  const documentError =
+    loadedDoc?.filename === selectedFilename ? (loadedDoc.error ?? null) : null;
 
   useEffect(() => {
     if (format !== "txt") {
@@ -170,7 +176,8 @@ export default function SimulatorPage() {
 
     fetch(`${API_BASE_URL}/static/invoices/${selectedFilename}`)
       .then((res) => {
-        if (!res.ok) throw new Error(`Failed to load ${selectedFilename}: ${res.status}`);
+        if (!res.ok)
+          throw new Error(`Failed to load ${selectedFilename}: ${res.status}`);
         return res.text();
       })
       .then((text) => {
@@ -178,7 +185,8 @@ export default function SimulatorPage() {
       })
       .catch((err) => {
         if (!ignore) {
-          const message = err instanceof Error ? err.message : "Failed to load document";
+          const message =
+            err instanceof Error ? err.message : "Failed to load document";
           setLoadedDoc({ filename: selectedFilename, error: message });
         }
       });
@@ -203,7 +211,9 @@ export default function SimulatorPage() {
       const invoice = await triggerInvoice(txtFilename);
       setSendResult({ filename: txtFilename, status: invoice.status });
     } catch (err) {
-      setSendError(err instanceof Error ? err.message : "Failed to send invoice");
+      setSendError(
+        err instanceof Error ? err.message : "Failed to send invoice",
+      );
     } finally {
       setSending(false);
     }
@@ -216,8 +226,8 @@ export default function SimulatorPage() {
           Vendor Invoice Simulator
         </h1>
         <p className="text-sm text-zinc-500">
-          Stand-in for the external system that sends invoices into PPV Memory. Pick a
-          document, review it, and send it into the pipeline.
+          Stand-in for the external system that sends invoices into PPV Memory.
+          Pick a document, review it, and send it into the pipeline.
         </p>
       </header>
 
@@ -238,10 +248,13 @@ export default function SimulatorPage() {
               className="mt-2 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
             >
               {INVOICE_NUMBERS.map((num) => (
-                <optgroup key={num} label={`${num} (${INVOICE_SUMMARIES[num].vendor})`}>
-                  <option value={`${num}.txt`}>Text (.txt)</option>
-                  <option value={`${num}.pdf`}>PDF (.pdf)</option>
-                </optgroup>
+                // <optgroup key={num} label={`${num} (${INVOICE_SUMMARIES[num].vendor})`}>
+                // <option value={`${num}.txt`}>Text (.txt)</option>
+                <option
+                  key={num}
+                  value={`${num}.pdf`}
+                >{`${num} (${INVOICE_SUMMARIES[num].vendor})`}</option>
+                // </optgroup>
               ))}
             </select>
 
@@ -255,8 +268,7 @@ export default function SimulatorPage() {
 
             {sendResult && (
               <p className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
-                Sent — {sendResult.filename} is now{" "}
-                {STATUS_LABELS[sendResult.status].toLowerCase()}.
+                Sent — {sendResult.filename.split(".")[0]}
               </p>
             )}
             {sendError && (
@@ -273,23 +285,37 @@ export default function SimulatorPage() {
               </h2>
               <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-zinc-500">Vendor</dt>
+                  <dt className="text-xs uppercase tracking-wide text-zinc-500">
+                    Vendor
+                  </dt>
                   <dd className="mt-0.5 text-zinc-900">{summary.vendor}</dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-zinc-500">PO reference</dt>
-                  <dd className="mt-0.5 text-zinc-900">{summary.poReference}</dd>
+                  <dt className="text-xs uppercase tracking-wide text-zinc-500">
+                    PO reference
+                  </dt>
+                  <dd className="mt-0.5 text-zinc-900">
+                    {summary.poReference}
+                  </dd>
                 </div>
                 <div className="col-span-2">
-                  <dt className="text-xs uppercase tracking-wide text-zinc-500">Item</dt>
+                  <dt className="text-xs uppercase tracking-wide text-zinc-500">
+                    Item
+                  </dt>
                   <dd className="mt-0.5 text-zinc-900">{summary.item}</dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-zinc-500">Quantity</dt>
-                  <dd className="mt-0.5 tabular-nums text-zinc-900">{summary.quantity}</dd>
+                  <dt className="text-xs uppercase tracking-wide text-zinc-500">
+                    Quantity
+                  </dt>
+                  <dd className="mt-0.5 tabular-nums text-zinc-900">
+                    {summary.quantity}
+                  </dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-zinc-500">Unit price</dt>
+                  <dt className="text-xs uppercase tracking-wide text-zinc-500">
+                    Unit price
+                  </dt>
                   <dd className="mt-0.5 tabular-nums text-zinc-900">
                     ${summary.unitPrice.toFixed(2)}
                   </dd>
@@ -303,7 +329,9 @@ export default function SimulatorPage() {
               <h2 className="text-xs font-medium uppercase tracking-wide text-indigo-500">
                 Scenario notes
               </h2>
-              <p className="mt-2 text-sm leading-relaxed text-indigo-900">{notes}</p>
+              <p className="mt-2 text-sm leading-relaxed text-indigo-900">
+                {notes}
+              </p>
             </div>
           )}
         </section>
@@ -323,7 +351,9 @@ export default function SimulatorPage() {
                 className="h-[600px] w-full rounded-lg border border-zinc-200"
               />
             ) : documentLoading ? (
-              <p className="py-10 text-center text-sm text-zinc-400">Loading…</p>
+              <p className="py-10 text-center text-sm text-zinc-400">
+                Loading…
+              </p>
             ) : documentError ? (
               <p className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
                 {documentError}
