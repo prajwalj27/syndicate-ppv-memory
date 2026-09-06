@@ -1,0 +1,15 @@
+INVOICE
+Invoice Number: INV-3002
+Invoice Date: 2026-07-26
+Vendor: Crestpoint IT Services
+Vendor Address: 220 Industrial Pkwy, Newark, NJ 07102
+PO Reference: PO-6001
+
+Line Items:
+- Managed IT Support — Monthly Retainer x 1 @ $3063.00 = $3063.00
+
+Subtotal: $3063.00
+Tax: $0.00
+Total Due: $3063.00
+Payment Terms: Net 30
+Remit To: Crestpoint IT Services, Accounts Receivable
