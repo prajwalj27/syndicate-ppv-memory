@@ -61,3 +61,9 @@ def insert_resolution(
             """,
             (vendor, item, resolved_price, resolved_by, reason, date_resolved),
         )
+
+
+def reset_resolutions() -> None:
+    """Delete all rows from the resolutions table, for a clean demo run."""
+    with _connect() as conn:
+        conn.execute("DELETE FROM resolutions")
