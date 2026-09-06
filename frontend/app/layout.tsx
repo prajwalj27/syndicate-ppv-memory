@@ -32,6 +32,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 PPV Memory
               </span>
             </Link>
+            <nav className="ml-auto flex items-center gap-4 text-sm text-zinc-500">
+              <Link href="/" className="transition hover:text-zinc-900">
+                Dashboard
+              </Link>
+              <Link href="/simulator" className="transition hover:text-zinc-900">
+                Invoice Simulator
+              </Link>
+            </nav>
           </div>
         </header>
         <main className="flex-1">{children}</main>
