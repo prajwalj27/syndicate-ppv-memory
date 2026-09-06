@@ -7,12 +7,14 @@ incrementally as later build steps are implemented.
 from __future__ import annotations
 
 from datetime import date
+from pathlib import Path
 
 from langgraph.types import interrupt
 
 from src.db import get_latest_resolution, get_po, insert_resolution
-from src.extraction import extract_invoice_file
+from src.extraction import extract_invoice_fields, extract_invoice_file
 from src.graph.state import PPVState
+from src.pdf_extract import extract_pdf_text
 
 RESOLUTION_MATCH_TOLERANCE = 0.01
 
@@ -21,9 +23,17 @@ def extract_node(state: PPVState) -> PPVState:
     """Extract structured invoice fields and merge them into the state.
 
     Calls the existing LLM-based extraction logic on `state["invoice_file"]`
-    and returns the state with an added `extracted_data` key.
+    and returns the state with an added `extracted_data` key. PDF invoices
+    are read via `pdf_extract` first since `extract_invoice_file` only
+    reads plain text; .txt invoices go through the existing path unchanged.
     """
-    fields = extract_invoice_file(state["invoice_file"])
+    path = state["invoice_file"]
+    if path.endswith(".pdf"):
+        text = extract_pdf_text(path)
+        fields = extract_invoice_fields(text)
+        fields["source_file"] = Path(path).name
+    else:
+        fields = extract_invoice_file(path)
     return {**state, "extracted_data": fields}
 
 

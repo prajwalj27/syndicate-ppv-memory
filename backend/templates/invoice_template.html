@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Invoice {{ invoice_number }}</title>
+<style>
+  @page {
+    size: Letter;
+    margin: 2cm;
+  }
+  body {
+    font-family: "DejaVu Sans", Arial, sans-serif;
+    color: #222;
+    font-size: 11pt;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 3px solid #1f3a5f;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+  .vendor-name {
+    font-size: 22pt;
+    font-weight: bold;
+    color: #1f3a5f;
+    margin: 0;
+  }
+  .vendor-address {
+    margin: 4px 0 0 0;
+    color: #555;
+  }
+  .invoice-label {
+    font-size: 26pt;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #1f3a5f;
+    text-align: right;
+    margin: 0;
+  }
+  .meta-row {
+    display: flex;
+    justify-content: space-between;
+    background: #f2f5f9;
+    border: 1px solid #dde4ec;
+    border-radius: 4px;
+    padding: 10px 16px;
+    margin-bottom: 18px;
+  }
+  .meta-item .label {
+    font-size: 8pt;
+    text-transform: uppercase;
+    color: #777;
+    margin: 0;
+  }
+  .meta-item .value {
+    font-size: 11pt;
+    font-weight: bold;
+    margin: 2px 0 0 0;
+  }
+  .parties {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .party {
+    width: 48%;
+  }
+  .party h3 {
+    font-size: 9pt;
+    text-transform: uppercase;
+    color: #777;
+    margin: 0 0 4px 0;
+  }
+  .party p {
+    margin: 0;
+    line-height: 1.4;
+  }
+  .balance-due {
+    background: #1f3a5f;
+    color: #fff;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .balance-due .label {
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .balance-due .amount {
+    font-size: 18pt;
+    font-weight: bold;
+  }
+  table.items {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+  }
+  table.items th {
+    background: #1f3a5f;
+    color: #fff;
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 9pt;
+    text-transform: uppercase;
+  }
+  table.items td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #e0e5eb;
+  }
+  table.items th.num, table.items td.num {
+    text-align: right;
+  }
+  .totals {
+    width: 40%;
+    margin-left: 60%;
+    margin-bottom: 24px;
+  }
+  .totals .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 10px;
+  }
+  .totals .row.total {
+    border-top: 2px solid #1f3a5f;
+    font-weight: bold;
+    font-size: 12pt;
+    padding-top: 8px;
+  }
+  .footer {
+    border-top: 1px solid #dde4ec;
+    padding-top: 12px;
+    font-size: 9pt;
+    color: #555;
+  }
+  .footer .block {
+    margin-bottom: 10px;
+  }
+  .footer h4 {
+    font-size: 8pt;
+    text-transform: uppercase;
+    color: #777;
+    margin: 0 0 3px 0;
+  }
+  .footer p {
+    margin: 0;
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <div>
+      <p class="vendor-name">{{ vendor }}</p>
+      <p class="vendor-address">{{ vendor_address }}</p>
+    </div>
+    <p class="invoice-label">INVOICE</p>
+  </div>
+
+  <div class="meta-row">
+    <div class="meta-item">
+      <p class="label">Invoice #</p>
+      <p class="value">{{ invoice_number }}</p>
+    </div>
+    <div class="meta-item">
+      <p class="label">Date</p>
+      <p class="value">{{ invoice_date }}</p>
+    </div>
+    <div class="meta-item">
+      <p class="label">PO Number</p>
+      <p class="value">{{ po_number }}</p>
+    </div>
+  </div>
+
+  <div class="parties">
+    <div class="party">
+      <h3>Bill To</h3>
+      <p>Acme Corporate Services<br>
+      Attn: Accounts Payable<br>
+      500 Commerce Ave, Suite 300<br>
+      Newark, NJ 07103</p>
+    </div>
+    <div class="party">
+      <h3>Ship To</h3>
+      <p>Acme Corporate Services<br>
+      Receiving Dock B<br>
+      500 Commerce Ave, Suite 300<br>
+      Newark, NJ 07103</p>
+    </div>
+  </div>
+
+  <div class="balance-due">
+    <span class="label">Balance Due</span>
+    <span class="amount">${{ total }}</span>
+  </div>
+
+  <table class="items">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th class="num">Quantity</th>
+        <th class="num">Rate</th>
+        <th class="num">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ item }}</td>
+        <td class="num">{{ quantity }}</td>
+        <td class="num">${{ unit_price }}</td>
+        <td class="num">${{ line_total }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="totals">
+    <div class="row"><span>Subtotal</span><span>${{ subtotal }}</span></div>
+    <div class="row"><span>Tax</span><span>${{ tax }}</span></div>
+    <div class="row total"><span>Total</span><span>${{ total }}</span></div>
+  </div>
+
+  <div class="footer">
+    {% if note %}
+    <div class="block">
+      <h4>Notes</h4>
+      <p>{{ note }}</p>
+    </div>
+    {% endif %}
+    <div class="block">
+      <h4>Remit To</h4>
+      <p>{{ remit_to }}</p>
+    </div>
+    <div class="block">
+      <h4>Terms</h4>
+      <p>{{ terms }}</p>
+    </div>
+  </div>
+
+</body>
+</html>
