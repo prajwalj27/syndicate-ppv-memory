@@ -15,7 +15,7 @@ function ResolutionForm({
   defaultPrice: number;
   onResolved: (invoice: Invoice) => void;
 }) {
-  const [resolverName, setResolverName] = useState("");
+  const [resolverName, setResolverName] = useState("Prajwal Jaiswal");
   const [resolvedPrice, setResolvedPrice] = useState(String(defaultPrice));
   const [reason, setReason] = useState("");
   const [submitting, setSubmitting] = useState(false);
