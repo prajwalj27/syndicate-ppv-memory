@@ -20,6 +20,10 @@ wheels/
 .installed.cfg
 *.egg
 
+# --- Next.js frontend (not a Python lib/ dir) ---
+!frontend/lib/
+!frontend/lib/**
+
 # --- Virtual environments ---
 .venv/
 venv/
