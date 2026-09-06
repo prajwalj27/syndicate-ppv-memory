@@ -17,6 +17,7 @@ from src.graph.state import PPVState
 from src.pdf_extract import extract_pdf_text
 
 RESOLUTION_MATCH_TOLERANCE = 0.01
+AUTO_APPROVE_VARIANCE_TOLERANCE = 0.02
 
 
 def extract_node(state: PPVState) -> PPVState:
@@ -66,8 +67,9 @@ def decide_node(state: PPVState) -> PPVState:
     """Decide whether to auto-approve or flag the invoice, with reasoning.
 
     Auto-approves when the invoice price matches a prior resolution's
-    resolved price (within a cent) or exactly matches the PO price;
-    otherwise flags it for review.
+    resolved price (within a cent), or when the variance against the PO
+    price is within the auto-approval tolerance (which also covers an
+    exact match); otherwise flags it for review.
     """
     extracted = state["extracted_data"]
     po_record = state["po_record"]
@@ -84,12 +86,21 @@ def decide_node(state: PPVState) -> PPVState:
             f"Consistent with prior approval on {prior_resolution['date_resolved']}: "
             f"'{prior_resolution['reason']}'. Auto-approved, no review needed."
         )
-    elif variance_pct == 0:
+    elif variance_pct is not None and abs(variance_pct) <= AUTO_APPROVE_VARIANCE_TOLERANCE:
         decision = "auto_approve"
-        reasoning = (
-            f"Invoice unit price ${invoice_unit_price:.2f} is an exact match to "
-            f"PO {po_record['po_number']}'s price. Auto-approved, no review needed."
-        )
+        if variance_pct == 0:
+            reasoning = (
+                f"Invoice unit price ${invoice_unit_price:.2f} is an exact match to "
+                f"PO {po_record['po_number']}'s price. Auto-approved, no review needed."
+            )
+        else:
+            reasoning = (
+                f"Invoice unit price ${invoice_unit_price:.2f} vs PO "
+                f"{po_record['po_number']}'s price ${po_record['unit_price']:.2f} "
+                f"({variance_pct:+.1%} variance) is within the "
+                f"{AUTO_APPROVE_VARIANCE_TOLERANCE:.0%} auto-approval tolerance. "
+                f"Auto-approved, no review needed."
+            )
     else:
         decision = "flag"
         reasoning = (
