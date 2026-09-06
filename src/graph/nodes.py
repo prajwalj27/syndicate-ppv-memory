@@ -6,6 +6,8 @@ incrementally as later build steps are implemented.
 
 from __future__ import annotations
 
+from langgraph.types import interrupt
+
 from src.db import get_latest_resolution, get_po
 from src.extraction import extract_invoice_file
 from src.graph.state import PPVState
@@ -85,3 +87,28 @@ def decide_node(state: PPVState) -> PPVState:
         )
 
     return {**state, "decision": decision, "reasoning": reasoning}
+
+
+def human_review_node(state: PPVState) -> PPVState:
+    """Pause a flagged invoice for buyer review via LangGraph's `interrupt()`.
+
+    Surfaces everything a human buyer needs to make a call: vendor, item,
+    invoice vs. PO unit price, variance %, the flagging reasoning, and any
+    prior resolution for context. The review-queue UI (Step 4) reads this
+    payload from the graph's interrupt state.
+    """
+    extracted = state["extracted_data"]
+    po_record = state["po_record"]
+
+    payload = {
+        "vendor": extracted["vendor"],
+        "item": extracted["item"],
+        "invoice_unit_price": extracted["unit_price"],
+        "po_unit_price": po_record["unit_price"],
+        "variance_pct": state["variance_pct"],
+        "reasoning": state["reasoning"],
+        "prior_resolution": state["prior_resolution"],
+    }
+    human_resolution = interrupt(payload)
+
+    return {**state, "human_resolution": human_resolution}
