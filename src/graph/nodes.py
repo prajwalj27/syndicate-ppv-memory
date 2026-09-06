@@ -6,12 +6,11 @@ incrementally as later build steps are implemented.
 
 from __future__ import annotations
 
-from typing import Any
-
 from src.extraction import extract_invoice_file
+from src.graph.state import PPVState
 
 
-def extract_node(state: Any) -> dict:
+def extract_node(state: PPVState) -> PPVState:
     """Extract structured invoice fields and merge them into the state.
 
     Calls the existing LLM-based extraction logic on `state["invoice_file"]`
