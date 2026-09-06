@@ -3,7 +3,9 @@
 Runs the full graph (extract_node -> lookup_node -> decide_node, per
 src/graph/build_graph.py) against all invoices in data/invoices/ and
 prints the resulting `decision` and `reasoning` for each, to visually
-confirm the wired graph's behavior end to end.
+confirm the wired graph's behavior end to end. Flagged invoices pause at
+`human_review_node`'s interrupt(); see scripts/test_human_review.py for a
+closer look at that payload.
 
 Usage:
     python scripts/test_graph.py
@@ -31,10 +33,14 @@ def main() -> None:
 
     for path in invoice_paths:
         print(f"--- {path.name} ---")
+        config = {"configurable": {"thread_id": path.stem}}
         try:
-            result_state = graph.invoke({"invoice_file": str(path)})
-            print(f"decision: {result_state['decision']}")
-            print(f"reasoning: {result_state['reasoning']}")
+            result_state = graph.invoke({"invoice_file": str(path)}, config=config)
+            if result_state.get("__interrupt__"):
+                print("decision: flag (paused for human review)")
+            else:
+                print(f"decision: {result_state['decision']}")
+                print(f"reasoning: {result_state['reasoning']}")
         except Exception as exc:
             print(f"ERROR: {exc}")
         print()
