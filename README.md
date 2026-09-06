@@ -4,7 +4,12 @@ A Purchase Price Variance (PPV) agent — see [docs/PLAN.md](docs/PLAN.md) for t
 
 ## Setup
 
+Use a virtual environment — `langgraph` pulls in a `langchain-core` version
+that can conflict with other, unrelated projects if installed globally:
+
 ```
+python -m venv .venv
+.venv/Scripts/activate   # or `source .venv/bin/activate` on macOS/Linux
 pip install -r requirements.txt
 ```
 
@@ -42,4 +47,19 @@ the 5 sample invoices and print the results:
 
 ```
 python scripts/extract_invoices.py
+```
+
+## Graph pipeline
+
+`src/graph/build_graph.py` wires the LangGraph pipeline:
+`extract_node -> lookup_node -> decide_node`, with a conditional edge from
+`decide_node` based on `decision` (`auto_approve` / `flag`). Both branches
+currently end the graph — the `flag` branch will route to
+`human_review_node` once it's built (Step 3 in `docs/BUILD_PLAN.md`).
+
+Run the compiled graph against the 5 sample invoices and print each
+decision:
+
+```
+python scripts/test_graph.py
 ```
