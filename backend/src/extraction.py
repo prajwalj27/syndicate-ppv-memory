@@ -39,7 +39,7 @@ from typing import Any
 from dotenv import load_dotenv
 from openai import OpenAI
 
-load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+load_dotenv(Path(__file__).resolve().parent.parent.parent / ".env")
 
 DEFAULT_BASE_URL = "https://api.tensormux.com/v1"
 DEFAULT_MODEL = "glm-4-7-flash"
