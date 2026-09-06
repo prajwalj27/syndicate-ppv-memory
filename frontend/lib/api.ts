@@ -58,3 +58,13 @@ export function triggerInvoice(filename: string): Promise<Invoice> {
     body: JSON.stringify({ filename }),
   });
 }
+
+export function resolveInvoice(
+  id: number,
+  data: { resolver_name: string; resolved_price: number; reason: string }
+): Promise<Invoice> {
+  return request<Invoice>(`/invoices/${id}/resolve`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
