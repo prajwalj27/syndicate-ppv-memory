@@ -91,18 +91,19 @@ def decide_node(state: PPVState) -> PPVState:
     return {**state, "decision": decision, "reasoning": reasoning}
 
 
-def human_review_node(state: PPVState) -> PPVState:
-    """Pause a flagged invoice for buyer review via LangGraph's `interrupt()`.
+def build_review_payload(state: PPVState) -> dict:
+    """Build the payload a human buyer needs to review a flagged invoice.
 
     Surfaces everything a human buyer needs to make a call: vendor, item,
     invoice vs. PO unit price, variance %, the flagging reasoning, and any
-    prior resolution for context. The review-queue UI (Step 4) reads this
-    payload from the graph's interrupt state.
+    prior resolution for context. Used both by `human_review_node` (via
+    `interrupt()`) and directly by the API layer, which calls this plain
+    function instead of pausing a graph run to get the payload.
     """
     extracted = state["extracted_data"]
     po_record = state["po_record"]
 
-    payload = {
+    return {
         "vendor": extracted["vendor"],
         "item": extracted["item"],
         "invoice_unit_price": extracted["unit_price"],
@@ -111,7 +112,16 @@ def human_review_node(state: PPVState) -> PPVState:
         "reasoning": state["reasoning"],
         "prior_resolution": state["prior_resolution"],
     }
-    human_resolution = interrupt(payload)
+
+
+def human_review_node(state: PPVState) -> PPVState:
+    """Pause a flagged invoice for buyer review via LangGraph's `interrupt()`.
+
+    Kept for old test scripts that exercise the interrupt/resume path
+    directly against the graph; the API layer calls `build_review_payload`
+    instead and never invokes this node or `interrupt()`.
+    """
+    human_resolution = interrupt(build_review_payload(state))
 
     return {**state, "human_resolution": human_resolution}
 
