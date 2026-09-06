@@ -129,7 +129,7 @@ Start the frontend:
 npm run dev
 ```
 
-The dashboard is now at `http://localhost:3000`. Both the backend (port 8000) and frontend (port 3000) need to be running at the same time — the backend's CORS config only allows `http://localhost:3000`.
+The dashboard is now at `http://localhost:3000`. Both the backend (port 8000) and frontend (port 3000) need to be running at the same time. The backend allows CORS requests from any origin (it's a local demo app, not production).
 
 ### Regenerating a clean demo state
 
